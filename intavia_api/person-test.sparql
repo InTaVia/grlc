@@ -1,3 +1,9 @@
+#+ pagination: 100
+#+ transform: {
+#+     "label": "?personLabel",
+#+     "uri": "?person"
+#+   }
+
 PREFIX  bds:  <http://www.bigdata.com/rdf/search#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
