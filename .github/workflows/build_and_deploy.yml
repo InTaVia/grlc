@@ -57,7 +57,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   rancher:
-     needs: push_to_registry
+     needs: docker
      name: Deploy to rancher
      runs-on: ubuntu-latest
      steps:
