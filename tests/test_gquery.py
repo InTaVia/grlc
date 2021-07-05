@@ -64,13 +64,13 @@ class TestGQuery(unittest.TestCase):
                 self.assertEqual(param['format'], 'iri', 'Should be format iri')
             if '_number' in orig:
                 self.assertEqual(param['type'], 'number',
-                                 '{} Should be type number'.format(param))
+                                 'Should be type number')
             if '_literal' in orig:
                 self.assertEqual(param['type'], 'literal',
-                                 '{} Should be type literal'.format(param))
+                                 'Should be type literal')
             if '_en' in orig:
                 self.assertEqual(param['type'], 'literal',
-                                 f'{param} Should be type literal')
+                                 'Should be type literal')
                 self.assertEqual(param['lang'], 'en', 'Should be en language')
             if '_integer' in orig:
                 self.assertEqual(
@@ -213,7 +213,6 @@ class TestGQuery(unittest.TestCase):
         # Rewritten query will probably be incorrect because parameters are not
         # carefully constructed, but that is not the scope of this test
         rq_rw = gquery.rewrite_query(rq, parameters, args)
-        print(rq_rw)
 
         for pName, pValue in parameters.items():
             self.assertIn(
