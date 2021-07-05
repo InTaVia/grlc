@@ -9,5 +9,6 @@ SELECT * WHERE {
  ?s ?p ?_o4_literal .
  ?s ?p ?_o5_en .
  ?s ?p ?_o6_integer .
- ?s ?p ?_o7_xsd_date .
+ ?s ?p ?_o7_xsd_date
+ FILTER(?stuff > ?_o8_xsd_date)
 }
