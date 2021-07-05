@@ -3,7 +3,7 @@ from os import path
 from glob import glob
 
 from collections import namedtuple
-from src.fileLoaders import LocalLoader
+from grlc.fileLoaders import LocalLoader
 
 base_url = path.join('tests', 'repo')
 def buildEntry(entryName):
