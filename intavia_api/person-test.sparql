@@ -1,4 +1,4 @@
-#+ pagination: 100
+#+ endpoint_in_url: False
 #+ transform: {
 #+     "label": "?personLabel",
 #+     "uri": "?person"
@@ -6,12 +6,15 @@
 
 PREFIX  bds:  <http://www.bigdata.com/rdf/search#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 SELECT ?person ?personLabel
 WHERE {
     ?person a crm:E21_Person .
-    ?person rdfs:label ?personLabel
+    ?person rdfs:label|skos:prefLabel ?personLabel
     SERVICE <http://www.bigdata.com/rdf/search#search> { 
         ?personLabel bds:search ?_name_de
     }
 }
+
+ORDER BY DESC(?person)
