@@ -13,6 +13,10 @@ import traceback
 import re
 import requests
 
+
+from rdflib.plugins.sparql.algebra import traverse, _findVars
+import functools
+
 # grlc modules
 from . import static as static
 from . import glogging as glogging
@@ -320,16 +324,29 @@ def get_metadata(rq, endpoint):
     try:
         # THE PARSING
         # select, describe, construct, ask
-        parsed_query = translateQuery(Query.parseString(rq, parseAll=True))
+        parsed_query_string = Query.parseString(rq, parseAll=True)
+
+        parsed_query = translateQuery(parsed_query_string)
         query_metadata['type'] = parsed_query.algebra.name
+
+        # Get variables, including those in FILTER () etc. clauses
+        # Previous version used parsed_query.algebra["_vars"], but this omitted vars
+        # in e.g. FILTER clauses (due to rdflib, which don't really understand)
+        # Instead, use rdflib's internal functions to get non-filtered list of vars,
+        # which still includes those in FILTER clauses. Hopefully this solves issues such as
+        # https://github.com/CLARIAH/grlc/issues/322
+        variables = set()
+        traverse(parsed_query_string[1].where, functools.partial(_findVars, res=variables))
+
+
         if query_metadata['type'] == 'SelectQuery':
             # Projection variables
             query_metadata['variables'] = parsed_query.algebra['PV']
             # Parameters
-            query_metadata['parameters'] = get_parameters(rq, parsed_query.algebra['_vars'], endpoint, query_metadata)
+            query_metadata['parameters'] = get_parameters(rq, variables, endpoint, query_metadata)
         elif query_metadata['type'] == 'ConstructQuery':
             # Parameters
-            query_metadata['parameters'] = get_parameters(rq, parsed_query.algebra['_vars'], endpoint, query_metadata)
+            query_metadata['parameters'] = get_parameters(rq, variables, endpoint, query_metadata)
         else:
             glogger.warning(
                 "Query type {} is currently unsupported and no metadata was parsed!".format(query_metadata['type']))

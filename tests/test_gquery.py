@@ -10,6 +10,10 @@ import grlc.gquery as gquery
 from flask import Flask
 
 
+from rdflib.plugins.sparql.parser import Query, UpdateUnit
+from rdflib.plugins.sparql.processor import translateQuery
+
+
 class TestGQuery(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -34,9 +38,22 @@ class TestGQuery(unittest.TestCase):
 
     def test_get_parameters(self):
         rq, _ = self.loader.getTextForName('test-rq')
+        
 
-        params = gquery.get_parameters(rq, '', '', {})
+        q = Query.parseString(rq, parseAll=True)
+
+        from rdflib.plugins.sparql.algebra import traverse, _findVars
+        import functools
+
+        vars = set()
+        traverse(q[1].where, functools.partial(_findVars, res=vars))
+        params = gquery.get_parameters(rq, vars, '', {})
+        print(params)
+    
+        # Check there are actually some params, otherwise the below tests are useless!
+        self.assertTrue(params)
         for paramName, param in params.items():
+        
             self.assertIn('name', param, 'Should have a name')
             self.assertIn('type', param, 'Should have a type')
             self.assertIn('required', param, 'Should have a required')
@@ -180,7 +197,8 @@ class TestGQuery(unittest.TestCase):
             'o4': self.build_get_parameter('o4', 'x4'),
             'o5': self.build_get_parameter('o5', 'x5'),
             'o6': self.build_get_parameter('o6', 'x6'),
-            'o7': self.build_get_parameter('o7', 'x7')
+            'o7': self.build_get_parameter('o7', 'x7'),
+            'o8': self.build_get_parameter('o8', 'x8')
         }
         args = {
             'o1': 'x1',
@@ -189,7 +207,8 @@ class TestGQuery(unittest.TestCase):
             'o4': 'x4',
             'o5': 'x5',
             'o6': 'x6',
-            'o7': 'x7'
+            'o7': 'x7',
+            'o8': 'x8'
         }
         # Rewritten query will probably be incorrect because parameters are not
         # carefully constructed, but that is not the scope of this test
@@ -207,3 +226,4 @@ class TestGQuery(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
