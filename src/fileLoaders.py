@@ -1,6 +1,6 @@
-import grlc.static as static
-from grlc.queryTypes import qType
-import grlc.glogging as glogging
+from . import static as static
+from .queryTypes import qType
+from . import glogging as glogging
 
 import json
 import requests

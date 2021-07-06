@@ -8,8 +8,8 @@ from subprocess import check_output
 from six import PY3
 
 # grlc modules
-import grlc.static as static
-import grlc.glogging as glogging
+from . import static as static
+from . import glogging as glogging
 
 glogger = glogging.getGrlcLogger(__name__)
 

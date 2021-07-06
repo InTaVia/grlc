@@ -14,8 +14,8 @@ import re
 import requests
 
 # grlc modules
-import grlc.static as static
-import grlc.glogging as glogging
+from . import static as static
+from . import glogging as glogging
 
 glogger = glogging.getGrlcLogger(__name__)
 

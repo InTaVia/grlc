@@ -44,7 +44,7 @@ config.add_section('local')
 config_filename = os.path.join(os.getcwd(), 'config.ini')
 print('Reading config file: ', config_filename)
 config.read(config_filename)
-ACCESS_TOKEN = config.get('auth', 'github_access_token')
+ACCESS_TOKEN = os.environ.get("GRLC_GITHUB_ACCESS_TOKEN", config.get('auth', 'github_access_token'))
 
 # Default endpoint, if none specified elsewhere
 DEFAULT_ENDPOINT = config.get('defaults', 'sparql_endpoint')

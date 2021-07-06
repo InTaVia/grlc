@@ -1,11 +1,11 @@
-import grlc.static as static
-import grlc.gquery as gquery
-import grlc.pagination as pageUtils
-import grlc.swagger as swagger
-from grlc.prov import grlcPROV
-from grlc.fileLoaders import GithubLoader, LocalLoader, URLLoader
-from grlc.queryTypes import qType
-from grlc import __version__ as grlc_version
+from . import static as static
+from . import gquery as gquery
+from . import pagination as pageUtils
+from . import swagger as swagger
+from .prov import grlcPROV
+from .fileLoaders import GithubLoader, LocalLoader, URLLoader
+from .queryTypes import qType
+from . import __version__ as grlc_version
 
 import re
 import requests
@@ -15,7 +15,7 @@ from rdflib import Graph
 
 import SPARQLTransformer
 
-import grlc.glogging as glogging
+from . import glogging as glogging
 
 glogger = glogging.getGrlcLogger(__name__)
 

@@ -2,8 +2,8 @@ from SPARQLWrapper import SPARQLWrapper, CSV, JSON
 from flask import jsonify
 from collections import defaultdict
 
-import static as static
-import grlc.glogging as glogging
+from . import static as static
+from . import glogging as glogging
 
 glogger = glogging.getGrlcLogger(__name__)
 

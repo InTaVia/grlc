@@ -6,9 +6,9 @@ from flask import Flask, request, jsonify, render_template, make_response
 from flask_cors import CORS
 
 # grlc modules
-import grlc.static as static
-import grlc.utils as utils
-import grlc.glogging as glogging
+from . import static as static
+from . import utils as utils
+from . import glogging as glogging
 
 glogger = glogging.getGrlcLogger(__name__)
 
