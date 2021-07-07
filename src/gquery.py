@@ -116,6 +116,7 @@ def get_parameters(rq, variables, endpoint, query_metadata, auth=None):
         ?_name_prefix_datatype The parameter value is considered as literal and the datatype 'prefix:datatype' is added during substitution. The prefix must be specified according to the SPARQL syntax.
     """
 
+
     # variables = translateQuery(Query.parseString(rq, parseAll=True)).algebra['_vars']
 
     ## Aggregates
@@ -302,6 +303,16 @@ def enable_custom_function_prefix(rq, prefix):
     return rq
 
 
+def get_all_variables_from_query_string(qs):
+    """ Finds all variables in a query string, even those inside
+    FILTER etc. clauses """
+
+    q = Query.parseString(qs, parseAll=True)
+    vs = set()
+    traverse(q[1].where, functools.partial(_findVars, res=vs))
+    return vs
+
+
 def get_metadata(rq, endpoint):
     """
     Returns the metadata 'exp' parsed from the raw query file 'rq'
@@ -324,29 +335,23 @@ def get_metadata(rq, endpoint):
     try:
         # THE PARSING
         # select, describe, construct, ask
-        parsed_query_string = Query.parseString(rq, parseAll=True)
 
-        parsed_query = translateQuery(parsed_query_string)
+        parsed_query = translateQuery(Query.parseString(rq, parseAll=True))
         query_metadata['type'] = parsed_query.algebra.name
 
-        # Get variables, including those in FILTER () etc. clauses
-        # Previous version used parsed_query.algebra["_vars"], but this omitted vars
-        # in e.g. FILTER clauses (due to rdflib, which don't really understand)
-        # Instead, use rdflib's internal functions to get non-filtered list of vars,
-        # which still includes those in FILTER clauses. Hopefully this solves issues such as
-        # https://github.com/CLARIAH/grlc/issues/322
-        variables = set()
-        traverse(parsed_query_string[1].where, functools.partial(_findVars, res=variables))
+        # Use alternative variable-finding function to find FILTER clause
+        # variables
+        variables_set = get_all_variables_from_query_string(rq)
 
 
         if query_metadata['type'] == 'SelectQuery':
             # Projection variables
             query_metadata['variables'] = parsed_query.algebra['PV']
             # Parameters
-            query_metadata['parameters'] = get_parameters(rq, variables, endpoint, query_metadata)
+            query_metadata['parameters'] = get_parameters(rq, variables_set, endpoint, query_metadata)
         elif query_metadata['type'] == 'ConstructQuery':
             # Parameters
-            query_metadata['parameters'] = get_parameters(rq, variables, endpoint, query_metadata)
+            query_metadata['parameters'] = get_parameters(rq, variables_set, endpoint, query_metadata)
         else:
             glogger.warning(
                 "Query type {} is currently unsupported and no metadata was parsed!".format(query_metadata['type']))

@@ -20,8 +20,7 @@ bin/
 share/
 .idea
 .pytest_cache
-.devcontainer
 
 config.ini
-
-venv/
+.devcontainer/
+.vscode
