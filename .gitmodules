@@ -1,3 +1,0 @@
-[submodule "intavia_api"]
-	path = intavia_api
-	url = https://github.com/InTaVia/grlc_sparql.git
