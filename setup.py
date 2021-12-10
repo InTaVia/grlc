@@ -47,9 +47,9 @@ setup(
     setup_requires=[
         # dependency for `python setup.py test`
         'pytest-runner',
-        # dependencies for `python setup.py build_sphinx`
-        'sphinx',
-        'recommonmark'
+        # dependencies for `python setup.py build_sphinx` -> throws a build error, removed it for the moment
+        #'sphinx',
+        #'recommonmark'
     ],
     tests_require=tests_require,
     package_data = { 'grlc': grlc_data },
