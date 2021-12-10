@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.7
 MAINTAINER albert.merono@vu.nl
 
 # Default values for env variables
