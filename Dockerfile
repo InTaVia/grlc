@@ -29,7 +29,7 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-RUN apt-get update && apt-get install -y nodejs
+RUN apt-get update && apt-get install -y nodejs npm
 
 COPY ./ ${GRLC_INSTALL_DIR}
 
