@@ -204,11 +204,15 @@ def dispatchSPARQLQuery(raw_sparql_query, loader, requestArgs, acceptHeader, con
             # Error contacting SPARQL endpoint
             glogger.debug('Exception encountered while connecting to SPARQL endpoint')
             return { 'error': str(e) }, 400, headers
-        glogger.debug('Response header from endpoint: ' + response.headers['Content-Type'])
+        try:
+            glogger.debug('Response header from endpoint: ' + response.headers['Content-Type'])
 
-        # Response headers
-        resp = response.text
-        headers['Content-Type'] = response.headers['Content-Type']
+            # Response headers
+            resp = response.text
+            headers['Content-Type'] = response.headers['Content-Type']
+        except Exception as e:
+            glogger.debug('Exception encountered while connecting to SPARQL endpoint')
+            return { 'error': str(e) }, 400, headers
 
     # If the query is paginated, set link HTTP headers
     if pagination:
