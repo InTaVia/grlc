@@ -22,5 +22,3 @@ share/
 .pytest_cache
 
 config.ini
-.devcontainer/
-.vscode
