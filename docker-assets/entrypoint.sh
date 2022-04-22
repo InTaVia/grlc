@@ -19,11 +19,11 @@ case ${1} in
         cd ${GRLC_INSTALL_DIR}
         # put github's access_token in place
         cp config.default.ini config.ini
-        sed -i "s/xxx/${GRLC_GITHUB_ACCESS_TOKEN}/" config.ini
+        sed -i "s/^.*github_access_token.*=.*$/github_access_token = ${GRLC_GITHUB_ACCESS_TOKEN}/" config.ini
         # configure grlc server name
         sed -i "s/grlc.io/${GRLC_SERVER_NAME}/" config.ini
         # configure default sparql endpoint
-        sed -i "s|http://dbpedia.org/sparql|${GRLC_SPARQL_ENDPOINT}|" config.ini
+        sed -i "s|^.*sparql_endpoint.*=.*$|sparql_endpoint = ${GRLC_SPARQL_ENDPOINT}|" config.ini
         # enable/disable debugging
         if [ $DEBUG ]; then
           sed -i "s/debug = False/debug = True/" config.ini
