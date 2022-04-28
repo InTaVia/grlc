@@ -21,7 +21,7 @@ case ${1} in
         cp config.default.ini config.ini
         sed -i "s/^.*github_access_token.*=.*$/github_access_token = ${GRLC_GITHUB_ACCESS_TOKEN}/" config.ini
         # configure grlc server name
-        sed -i "s/grlc.io/${GRLC_SERVER_NAME}/" config.ini
+        sed -i "s|^.*server_name .*=.*$|server_name = ${GRLC_SERVER_NAME}|" config.ini
         # configure default sparql endpoint
         sed -i "s|^.*sparql_endpoint.*=.*$|sparql_endpoint = ${GRLC_SPARQL_ENDPOINT}|" config.ini
         # enable/disable debugging
